@@ -15,6 +15,11 @@ class CustomerController extends Controller
     public function index()
     {
         //
+        $items = Customer::all();
+        return view('pages.customers.index', [
+            'items' => $items
+        ]);
+
     }
 
     /**
@@ -25,6 +30,7 @@ class CustomerController extends Controller
     public function create()
     {
         //
+        return view('pages.customers.create');
     }
 
     /**
@@ -36,6 +42,10 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->all();
+        Customer::create($data);
+
+        return redirect()->route('pelanggan.index');
     }
 
     /**
@@ -55,9 +65,13 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
         //
+        $item = Customer::findOrFail($id);
+        return view('pages.customers.edit', [
+            'item' => $item
+        ]);
     }
 
     /**
@@ -67,9 +81,13 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
         //
+        $data = $request->all();
+        Customer::findOrFail( $id )->update($data);
+
+        return redirect()->route('pelanggan.index');
     }
 
     /**
@@ -78,8 +96,12 @@ class CustomerController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy($id)
     {
         //
+        Customer::findOrFail($id)->delete();
+
+        return redirect()->route('pelanggan.index');
+
     }
 }
